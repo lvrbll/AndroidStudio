@@ -4,35 +4,64 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
-
+public class MainActivity extends AppCompatActivity {
+    private CalculatorActivity calculator;
+    private TextView text;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        int[] numberIds = new int[] {
+                R.id.zero,
+                R.id.one,
+                R.id.two,
+                R.id.three,
+                R.id.four,
+                R.id.five,
+                R.id.six,
+                R.id.seven,
+                R.id.eight,
+                R.id.nine
+        };
 
-        Button button1 = findViewById(R.id.button1);
-        Button button2 = findViewById(R.id.button2);
-        Button button3 = findViewById(R.id.button3);
+        int[] actionIds = new int[] {
+                R.id.plus,
+                R.id.minus,
+                R.id.multiply,
+                R.id.division,
+                R.id.equals
+        };
 
-        button1.setOnClickListener(this);
-        button2.setOnClickListener(this);
-        button3.setOnClickListener(this);
-    }
+        text = findViewById(R.id.text);
 
-    @Override
-    public void onClick(View view) {
-        if (view.getId() == R.id.button1) {
-            Toast.makeText(this, "Hello World!", Toast.LENGTH_LONG).show();
-        } else if (view.getId() == R.id.button2) {
-            Toast.makeText(this, "Imię + Nazwisko", Toast.LENGTH_LONG).show();
-        } else if (view.getId() == R.id.button3) {
-            Toast.makeText(this, "Goodbye!", Toast.LENGTH_LONG).show();
+        calculator = new CalculatorActivity();
+
+        View.OnClickListener numberButtonClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                calculator.onNumPressed(view.getId());
+                text.setText(calculator.getText());
+            }
+        };
+
+        View.OnClickListener actionButtonClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                calculator.onActionPressed(view.getId());
+                text.setText(calculator.getText());
+            }
+        };
+
+        for (int i = 0; i < numberIds.length; i++){
+            findViewById(numberIds[i]).setOnClickListener(numberButtonClickListener);
         }
-
+        for (int i = 0; i < actionIds.length; i++){
+            findViewById(actionIds[i]).setOnClickListener(actionButtonClickListener);
+        }
     }
 }
