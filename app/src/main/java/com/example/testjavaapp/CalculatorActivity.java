@@ -3,7 +3,7 @@ package com.example.testjavaapp;
 import android.annotation.SuppressLint;
 import android.util.Log;
 import android.widget.TextView;
-
+import java.util.ArrayList;
 import org.w3c.dom.ls.LSOutput;
 
 public class CalculatorActivity {
@@ -14,9 +14,11 @@ public class CalculatorActivity {
 
     private StringBuilder inputStr = new StringBuilder();
     private String temp = "";
+    private String tempAction = "";
+    ArrayList<Integer> numbers_to_action = new ArrayList<>();
 
     private int actionSelected;
-    private State state;
+    /*private State state;
 
     private enum State {
         firstArgInput,
@@ -27,15 +29,14 @@ public class CalculatorActivity {
 
     public CalculatorActivity() {
         state = State.firstArgInput;
-    }
+    }*/
 
     public void onNumPressed (int buttonId) {
         if (inputStr.length() < 9) {
             switch (buttonId){
                 case R.id.zero:
-                    if (inputStr.length() != 0){
-                        inputStr.append("0");
-                    }
+                    inputStr.append("0");
+                    temp += "0";
                     break;
                 case R.id.one:
                     inputStr.append("1");
@@ -78,25 +79,74 @@ public class CalculatorActivity {
     }
     public void onActionPressed (int actionId) {
         if (!temp.isEmpty()) {
-            int firstArgTemp = Integer.parseInt(temp);
-            Log.d("CA", "temp: " + firstArgTemp);
+            int ArgTemp = Integer.parseInt(temp);
             inputStr.setLength(0);
+            numbers_to_action.add(ArgTemp);
+            Log.d("CA", "temp: " + numbers_to_action);
             temp = "";
         } else {
             Log.d("CA", "temp is empty!");
+            inputStr.setLength(0);
         }
         switch (actionId) {
             case R.id.plus:
+                tempAction = "plus";
+                break;
             case R.id.minus:
+                tempAction = "minus";
+                break;
             case R.id.multiply:
+                tempAction = "multiply";
+                break;
             case R.id.division:
-                state = State.secondArgInput;
+                tempAction = "division";
                 break;
             case R.id.equals:
-                state = State.resultShow;
+                if(numbers_to_action.size()>0){
+                    if (tempAction=="plus"){
+                        int xnta = numbers_to_action.get(0);
+                        int ynta = numbers_to_action.get(1);
+                        int znta = xnta+ynta;
+                        Log.d("Action", "Plus: " + znta);
+                        tempAction = "";
+                        numbers_to_action.clear();
+                        inputStr.append(znta);
+                        numbers_to_action.add(znta);
+                    } else if (tempAction=="minus") {
+                        int xnta = numbers_to_action.get(0);
+                        int ynta = numbers_to_action.get(1);
+                        int znta = xnta-ynta;
+                        Log.d("Action", "Minus: " + znta);
+                        tempAction = "";
+                        numbers_to_action.clear();
+                        inputStr.append(znta);
+                        numbers_to_action.add(znta);
+                    } else if (tempAction=="multiply") {
+                        int xnta = numbers_to_action.get(0);
+                        int ynta = numbers_to_action.get(1);
+                        int znta = xnta*ynta;
+                        Log.d("Action", "Multiply: " + znta);
+                        tempAction = "";
+                        numbers_to_action.clear();
+                        inputStr.append(znta);
+                        numbers_to_action.add(znta);
+                    } else {
+                        int xnta = numbers_to_action.get(0);
+                        int ynta = numbers_to_action.get(1);
+                        int znta = xnta/ynta;
+                        Log.d("Action", "Division: " + znta);
+                        tempAction = "";
+                        numbers_to_action.clear();
+                        inputStr.append(znta);
+                        numbers_to_action.add(znta);
+                    }
+                }
                 break;
             case R.id.start:
-                state = State.clearAll;
+                inputStr.append(0);
+                tempAction = "";
+                numbers_to_action.clear();
+                numbers_to_action.add(0);
                 break;
         }
     }

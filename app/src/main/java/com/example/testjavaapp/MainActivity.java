@@ -54,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
         View.OnClickListener actionButtonClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view){
-                text.setText("");
                 calculator.onActionPressed(view.getId());
+                text.setText(calculator.getText());
             }
         };
 
