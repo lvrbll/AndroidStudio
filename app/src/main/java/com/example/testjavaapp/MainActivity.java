@@ -3,6 +3,7 @@ package com.example.testjavaapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Button;
@@ -34,7 +35,8 @@ public class MainActivity extends AppCompatActivity {
                 R.id.minus,
                 R.id.multiply,
                 R.id.division,
-                R.id.equals
+                R.id.equals,
+                R.id.start
         };
 
         text = findViewById(R.id.text);
@@ -52,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
         View.OnClickListener actionButtonClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view){
+                text.setText("");
                 calculator.onActionPressed(view.getId());
-                text.setText(calculator.getText());
             }
         };
 
@@ -63,5 +65,6 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < actionIds.length; i++){
             findViewById(actionIds[i]).setOnClickListener(actionButtonClickListener);
         }
+
     }
 }
